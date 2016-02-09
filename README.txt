@@ -1,5 +1,5 @@
-# Catalog-App
-Catalog app
+# tournament
+tournament
 
 ## Quick Start:
 
@@ -32,10 +32,10 @@ Success!  All tests pass!
 
 ```
   movies/
-â   âââ tournament.py
-â   âââ tournament.sql
-â   âââ tournament_test.py
-â   âââ README.md
+│   ├── tournament.py
+│   ├── tournament.sql
+│   ├── tournament_test.py
+│   ├── README.md
 ```
 
 ## Features:
