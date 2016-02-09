@@ -1,5 +1,5 @@
-# tournament
-tournament
+# Catalog-App
+Catalog App
 
 ## Quick Start:
 
