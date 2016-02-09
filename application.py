@@ -168,12 +168,12 @@ def gdisconnect():
         response = make_response(json.dumps('Successfully Disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         flash('Successfully Disconnected.')
-        return redirect(url_for('catalog'))
+        return redirect(url_for('showLogin'))
     else:
         response = make_response(json.dumps(
                                 'Fail to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
-        return response
+        return redirect(url_for('showLogin'))
 
 
 @app.route('/')
