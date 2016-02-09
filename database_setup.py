@@ -63,5 +63,8 @@ if __name__ == '__main__':
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
 
+    session.add(Category(name="Soccer"))
+    session.add(Category(name="Basketball"))
+    session.add(Category(name="Baseball"))
 
     session.commit()

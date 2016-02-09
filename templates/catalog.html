@@ -10,9 +10,11 @@
             <a href="{{url_for('showCategory', category_name = category.name)}}">
             <h3>{{category.name}}</h3>
             </a>
-                {% if session['email'] == category.user.email %}
-                <a href="{{url_for('editCategory', category_name = category.name)}}"><span>edit</span></a>
-                <a href="{{url_for('deleteCategory', category_name = category.name)}}"><span>delete</span></a>
+                {% if session['email'] %}
+                    {% if session['email'] == category.user.email %}
+                        <a href="{{url_for('editCategory', category_name = category.name)}}"><span>edit</span></a>
+                        <a href="{{url_for('deleteCategory', category_name = category.name)}}"><span>delete</span></a>
+                    {% endif %}
                 {% endif %}
         </div>
         {% endfor %}

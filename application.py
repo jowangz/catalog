@@ -239,10 +239,10 @@ def editCategory(category_name):
         if request.form['name']:
             # check if the category is duplicated.
             if session.query(Category).filter_by(
-                                                name=editedCategory.name
+                                                name=request.form['name']
                                                 ).first():
-                flash('Cannot Duplicate Category %s' % editedCategory.name)
-                return redirect(url_for('newCategory'))
+                flash('Cannot Duplicate Category %s' % request.form['name'])
+                return redirect(url_for('catalog'))
             editedCategory.name = request.form['name']
             flash('Category Successfully Edited %s' % editedCategory.name)
             return redirect(url_for('catalog'))
@@ -419,7 +419,7 @@ def deleteCategoryItem(category_name, item_name):
                                 category=itemToDelete.category)
 
 
-@app.route('/catalog/<category_name>/JSON')
+@app.route('/JSON/<category_name>/')
 def categoryJSON(category_name):
     """return JSON objects for the category."""
     category = session.query(Category).filter_by(name=category_name).one()

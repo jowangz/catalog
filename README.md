@@ -1,6 +1,8 @@
 # Catalog-App
 Catalog App
 
+A catalog web app that shorts item into different categories.
+
 ## Quick Start:
 
 1. Required installations:
@@ -29,15 +31,21 @@ Catalog App
 │   ├── newCategory.html
 │   ├── newCategoryItem.html
 │   ├── showCategory.html
+  README.md
+  application.py
+  client_secrets.json
+  database_setup.py
 
 ```
 
 ## Features:
   
-* tournament_test.py includes 9 differenct test case.
-* This is a simple swiss pairing python application. It makes matches based on
-  the ranking of individual player. This version supports draw game.
-
+* This is a category web application.
+* Users can create category list. 
+* Users can create item within different categories.
+* Users are able to modify items and categories which they created.
+* Users are able to upload image for the item.
+* Return JSON objects for the category by accessing ```localhost:8000/JSON/category_name/``` 
 
 ## Creator:
 
