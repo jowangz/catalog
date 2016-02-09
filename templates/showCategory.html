@@ -1,0 +1,39 @@
+{% extends "main.html" %}
+{% block content %}
+
+
+
+
+
+<div class="row">
+                <div class="col-md-4">
+                    <h2>Categories</h2>
+    {% for category in categories %}
+
+                    <div class="col-md-10 category-list">
+                        <a href="{{url_for('showCategory', category_name = category.name)}}">
+                        <h3>{{category.name}}</h3>
+                        </a>
+                        {% if session['email'] == category.user.email %}
+                        <a href="{{url_for('editCategory', category_name = category.name)}}"><span>edit</span></a>
+                        <a href="{{url_for('deleteCategory', category_name = category.name)}}"><span>delete</span></a>
+                        {% endif %}
+                    </div>
+
+
+
+
+    {% endfor %}
+</div>
+    <div class="col-md-8">
+        <h2>Under this category</h2>
+    {% for item in items %}
+                <div class="col-md-10 category-list">
+                    <a href="{{url_for('showCategoryItems', item_name=item.name, category_name=category.name)}}">
+                    <h3>{{item.name}}</h3>
+                    </a>
+                </div>
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}

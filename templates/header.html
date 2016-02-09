@@ -1,0 +1,40 @@
+<div class="row top-menu">
+	<div class="col-md-3">
+		<a href="{{url_for('catalog')}}">
+			<span class="glyphicon glyphicon-home" aria-hidden="true"></span>Show All Categories
+		</a>
+	</div>
+    <div class="col-md-3">
+        <div class="col-md-10 padding-none">
+            <a href="{{url_for('newCategory')}}">
+                <button class="btn btn-default" id="new-category">
+                    <span class="glyphicon" aria-hidden="true"></span>Add Category
+                </button>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="col-md-10 padding-none">
+            <a href="{{url_for('newCategoryItem')}}">
+                <button class="btn btn-default" id="new-category-item">
+                    <span class="glyphicon" aria-hidden="true"></span>Add New Item
+                </button>
+            </a>
+        </div>
+    </div>
+	<div class="col-md-3 text-right">
+                {% if session['username'] %}
+                <a href="/gdisconnect">
+                <button class="btn btn-default" id="login" style="background-color:#DA1E1D">
+                    <span class="glyphicon" aria-hidden="true"></span>Logout
+                </button>
+                </a>
+                {% else %}
+                <a href="/login">
+                <button class="btn btn-default" id="login" style="background-color:red">
+                    <span class="glyphicon" aria-hidden="true"></span>Login
+                </button>
+                </a>
+                {% endif %}
+	</div>
+</div>
