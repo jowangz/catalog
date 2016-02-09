@@ -1,35 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-	</head>
-	<body>
-		<div class="container">
-			{% include "header.html" %}
-<div class='flash'>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-          
-        <ul>
-        {% for message in messages %}
-            <li> <strong> {{ message }} </strong> </li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-    {% endwith %}
-</div>
-			{% block content %}
-
-
-
-
-
-
-			
-			{% endblock %}
-		</div>
-
-
-	</body>
+    <head>
+        <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+            {% include "header.html" %}
+                <div class='flash'>
+                    {% with messages = get_flashed_messages() %}
+                      {% if messages %}
+                          
+                        <ul>
+                        {% for message in messages %}
+                            <li> <strong> {{ message }} </strong> </li>
+                        {% endfor %}
+                        </ul>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
 </html>

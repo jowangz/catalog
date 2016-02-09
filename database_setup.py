@@ -1,7 +1,8 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
+from flask import session as login_session
 
 
 Base = declarative_base()
@@ -55,8 +56,12 @@ class Item(Base):
            'id': self.id,
                 }
 
+if __name__ == '__main__':
+    engine = create_engine('sqlite:///categoryitemwithuserandpicture.db')
+    Base.metadata.create_all(engine)
 
-engine = create_engine('sqlite:///categoryitemwithuserandpicture.db')
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
 
 
-Base.metadata.create_all(engine)
+    session.commit()

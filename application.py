@@ -356,6 +356,8 @@ def editCategoryItem(category_name, item_name):
                                             name=item_name,
                                             category_id=editedItemCategoryID
                                             ).first()
+    print login_session['user_id']
+    print editedItem.user_id
     if login_session['user_id'] != editedItem.user_id:
         flash('Permission Is Required To Edit Item %s.' % editedItem.name)
         return redirect('/catalog/%s/%s/' % (category_name, item_name))

@@ -1,40 +1,24 @@
 {% extends "main.html" %}
 {% block content %}
 
-
-
-
-
-	{% if items !=[] %}	
-		<div class="row">
-			<div class="col-md-1"></div>
-			<div class="col-md-3">
-
-						<div class="menu-item">
-                            <h2>{{item.name}}</h3>
-                                {% if item.picture %}
-                            <img src="{{url_for('uploaded_file', filename=item.picture)}}" style="max-width: 400px">
-                            <br>
-                                {% endif %}
-                            <h3>Description:</h3>
-                            <p>{{item.description}}</p>
-                            {% if session['email'] == item.user.email %}
-                            <a href="{{url_for('editCategoryItem', category_name = category.name, item_name = item.name)}}"><span>edit</span></a>
-                            <a href="{{url_for('deleteCategoryItem', category_name = category.name, item_name = item.name)}}"><span>delete</span></a>
-                            {% endif %}
-						</div>
-			</div>
-			<div class="col-md-1"></div>
-		</div>
-	{% endif %}
-
-
-
-
-
-
-
-
-
-
+{% if items !=[] %}	
+<div class="row">
+    <div class="col-md-1"></div>
+        <div class="col-md-3">
+            <div class="">
+                <h2>{{item.name}}</h3>
+                    {% if item.picture %}
+                <img src="{{url_for('uploaded_file', filename=item.picture)}}" style="max-width: 400px">
+                <br>
+                    {% endif %}
+                <h3>Description:</h3>
+                <p>{{item.description}}</p>
+                {% if session['email'] == item.user.email %}
+                <a href="{{url_for('editCategoryItem', category_name = category.name, item_name = item.name)}}"><span>edit</span></a>
+                <a href="{{url_for('deleteCategoryItem', category_name = category.name, item_name = item.name)}}"><span>delete</span></a>
+                {% endif %}
+            </div>
+        </div>
+</div>
+{% endif %}
 {% endblock %}
