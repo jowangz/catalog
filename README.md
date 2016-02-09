@@ -6,8 +6,9 @@ A catalog web app that shorts item into different categories.
 ## Quick Start:
 
 1. Required installations:
-    *   flask
-    *   sqlalchemy
+    *   flask   ```pip install flask==0.9```
+    *   sqlalchemy  ```pip install SQLAlchemy```
+    *   oauth2client    ```pip install ```pip install SQLAlchemy``````
 2. Clone the repo: ```git clone https://github.com/jowangz/catalog```
 3. Setup the database schema by using command ```python database_setup.py```
 4. Start the server: ```python application.py```
@@ -31,10 +32,10 @@ A catalog web app that shorts item into different categories.
 │   ├── newCategory.html
 │   ├── newCategoryItem.html
 │   ├── showCategory.html
-  README.md
-  application.py
-  client_secrets.json
-  database_setup.py
+README.md
+application.py
+client_secrets.json
+database_setup.py
 
 ```
 
