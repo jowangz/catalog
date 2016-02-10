@@ -5,6 +5,7 @@ from sqlalchemy import create_engine, asc, desc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Item, User
 from functools import wraps
+from dict2xml import dict2xml as xmlify
 
 from flask import session as login_session
 import random
@@ -36,7 +37,6 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
-
 
 
 def login_required(f):
@@ -441,6 +441,15 @@ def categoryJSON(category_name):
     return jsonify(CategoryItems=[i.serialize for i in items])
 
 
+@app.route('/XML/<path:category_name>/')
+@login_required
+def categoryXML(category_name):
+    category = session.query(Category).filter_by(name=category_name).one()
+    items = session.query(Item).filter_by(category_id=category.id).all()
+    data = [i.serialize for i in items]
+    return "<xmp>%s</xmp>" % xmlify(data, wrap="all", indent="  ")
+
+
 def getUserID(email):
     """Get user id."""
     try:
@@ -481,7 +490,6 @@ def uploaded_file(filename):
 
 def make_external(url):
     return urljoin(request.url_root, url)
-
 
 
 if __name__ == '__main__':

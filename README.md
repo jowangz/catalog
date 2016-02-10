@@ -9,6 +9,8 @@ A catalog web app that shorts item into different categories.
     *   flask   ```pip install flask```
     *   sqlalchemy  ```pip install SQLAlchemy```
     *   oauth2client    ```pip install oauth2client```
+    *   dict2xml    ```pip install dict2xml```
+    *   requests    ```pip install requests```
 2. Clone the repo: ```git clone https://github.com/jowangz/catalog```
 3. Setup the database schema by using command ```python database_setup.py```
 4. Start the server: ```python application.py```
@@ -46,7 +48,8 @@ database_setup.py
 * Users can create item within different categories.
 * Users are able to modify items and categories which they created.
 * Users are able to upload image for the item.
-* Return JSON objects for the category by accessing ```localhost:8000/JSON/category_name/``` 
+* Return JSON objects for the category by accessing ```localhost:8000/JSON/category_name/```
+* Return XML objects for the category by accessing ```localhost:8000/XML/category_name/```  
 
 ## Creator:
 
