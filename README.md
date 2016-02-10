@@ -6,7 +6,7 @@ A catalog web app that shorts item into different categories.
 ## Quick Start:
 
 1. Required installations:
-    *   flask   ```pip install flask==0.9```
+    *   flask   ```pip install flask```
     *   sqlalchemy  ```pip install SQLAlchemy```
     *   oauth2client    ```pip install oauth2client```
 2. Clone the repo: ```git clone https://github.com/jowangz/catalog```

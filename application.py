@@ -1,9 +1,10 @@
 import os
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, g
 from werkzeug import secure_filename
 from sqlalchemy import create_engine, asc, desc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Item, User
+from functools import wraps
 
 from flask import session as login_session
 import random
@@ -35,6 +36,16 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' not in login_session:
+            return redirect(url_for('showLogin'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 @app.route('/login')
@@ -109,7 +120,7 @@ def gconnect():
         return response
 
     # Store the access token in the session for later use.
-    login_session['credentials'] = credentials
+    login_session['credentials'] = credentials.to_json()
     login_session['gplus_id'] = gplus_id
 
     # Get user info
@@ -123,6 +134,7 @@ def gconnect():
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
+    login_session['access_token'] = credentials.access_token
 
     user_id = getUserID(login_session['email'])
     if not user_id:
@@ -153,7 +165,7 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
-    access_token = credentials.access_token
+    access_token = login_session['access_token']
     url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
@@ -164,6 +176,7 @@ def gdisconnect():
         del login_session['username']
         del login_session['email']
         del login_session['picture']
+        del login_session['access_token']
 
         response = make_response(json.dumps('Successfully Disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
@@ -200,10 +213,9 @@ def showCategory(category_name):
 
 
 @app.route('/new_category/', methods=['GET', 'POST'])
+@login_required
 def newCategory():
     """Create new category."""
-    if 'username' not in login_session:
-        return redirect('/login')
     if request.method == 'POST':
         if request.form['name']:
             newCategory_name = request.form['name']
@@ -225,7 +237,8 @@ def newCategory():
         return render_template('newCategory.html')
 
 
-@app.route('/catalog/<category_name>/edit/', methods=['GET', 'POST'])
+@app.route('/catalog/<path:category_name>/edit/', methods=['GET', 'POST'])
+@login_required
 def editCategory(category_name):
     """Edit a category with given category name."""
     editedCategory = session.query(Category).filter_by(
@@ -250,7 +263,8 @@ def editCategory(category_name):
         return render_template('editCategory.html', category=editedCategory)
 
 
-@app.route('/catalog/<category_name>/delete/', methods=['GET', 'POST'])
+@app.route('/catalog/<path:category_name>/delete/', methods=['GET', 'POST'])
+@login_required
 def deleteCategory(category_name):
     """Delete a category with a given category name."""
     categoryToDelete = session.query(Category).filter_by(
@@ -262,8 +276,6 @@ def deleteCategory(category_name):
             % categoryToDelete.name)
         return redirect('/catalog/%s/' % (category_name))
     if request.method == 'POST':
-        session.delete(categoryToDelete)
-        flash('%s Successfully Deleted' % categoryToDelete.name)
         itemsToDelete = session.query(Item).filter_by(
                             category_id=categoryToDelete.id).all()
         for i in itemsToDelete:
@@ -272,6 +284,8 @@ def deleteCategory(category_name):
                                         app.config['UPLOAD_FOLDER'],
                                         i.picture))
             session.delete(i)
+        session.delete(categoryToDelete)
+        flash('%s Successfully Deleted' % categoryToDelete.name)
         session.commit()
         return redirect(url_for('catalog', category_name=category_name))
     else:
@@ -280,7 +294,7 @@ def deleteCategory(category_name):
                                 category=categoryToDelete)
 
 
-@app.route('/catalog/<category_name>/<item_name>/')
+@app.route('/catalog/<path:category_name>/<path:item_name>/')
 def showCategoryItems(category_name, item_name):
     """Show the detail informations for a item
         with given category and item name.
@@ -294,10 +308,9 @@ def showCategoryItems(category_name, item_name):
 
 
 @app.route('/new_category_item/', methods=['GET', 'POST'])
+@login_required
 def newCategoryItem():
     """Create a new category item."""
-    if 'username' not in login_session:
-        return redirect('/login')
     if request.method == 'POST':
         if not request.form['category']:
             flash('Need To Select a Category for This Item')
@@ -346,8 +359,9 @@ def newCategoryItem():
 
 
 @app.route(
-    '/catalog/<category_name>/<item_name>/edit/',
+    '/catalog/<path:category_name>/<path:item_name>/edit/',
     methods=['GET', 'POST'])
+@login_required
 def editCategoryItem(category_name, item_name):
     """Edit a item with given category and item name."""
     editedItemCategoryID = session.query(Category).filter_by(
@@ -356,8 +370,6 @@ def editCategoryItem(category_name, item_name):
                                             name=item_name,
                                             category_id=editedItemCategoryID
                                             ).first()
-    print login_session['user_id']
-    print editedItem.user_id
     if login_session['user_id'] != editedItem.user_id:
         flash('Permission Is Required To Edit Item %s.' % editedItem.name)
         return redirect('/catalog/%s/%s/' % (category_name, item_name))
@@ -389,8 +401,9 @@ def editCategoryItem(category_name, item_name):
 
 
 @app.route(
-            '/catalog/<category_name>/<item_name>/delete/',
+            '/catalog/<path:category_name>/<path:item_name>/delete/',
             methods=['GET', 'POST'])
+@login_required
 def deleteCategoryItem(category_name, item_name):
     """Delete a item with given category and item name."""
     itemToDeleteCategoryID = session.query(Category).filter_by(
@@ -419,7 +432,8 @@ def deleteCategoryItem(category_name, item_name):
                                 category=itemToDelete.category)
 
 
-@app.route('/JSON/<category_name>/')
+@app.route('/JSON/<path:category_name>/')
+@login_required
 def categoryJSON(category_name):
     """return JSON objects for the category."""
     category = session.query(Category).filter_by(name=category_name).one()
@@ -467,6 +481,7 @@ def uploaded_file(filename):
 
 def make_external(url):
     return urljoin(request.url_root, url)
+
 
 
 if __name__ == '__main__':
