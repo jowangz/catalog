@@ -1,3 +1,8 @@
+# Catalog web app
+# Zheng Wang 02/09/2016
+# Udacity Catalog Project
+
+
 import os
 from flask import Flask, render_template, request, redirect, g
 from werkzeug import secure_filename
