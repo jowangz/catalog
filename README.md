@@ -50,6 +50,7 @@ database_setup.py
 * Users are able to upload image for the item.
 * Return JSON objects for the category by accessing ```localhost:8000/JSON/category_name/```
 * Return XML objects for the category by accessing ```localhost:8000/XML/category_name/```  
+* Three default categories: Baseball, Basketball and Soccer
 
 ## Creator:
 
